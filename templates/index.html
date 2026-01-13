@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>PDF Master</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+
+<body>
+
+<!-- ✅ Hidden iframe for download -->
+<iframe name="downloadFrame" style="display:none;"></iframe>
+
+<div class="container">
+    <h1>PDF Master</h1>
+    <p>Convert PDF to Word, Text, Images & more</p>
+
+    <!-- ✅ Form targets iframe -->
+    <form method="POST" enctype="multipart/form-data" target="downloadFrame">
+        
+        <label class="drop-zone">
+            <input 
+                type="file"
+                name="pdf"
+                accept=".pdf"
+                required
+                hidden
+                onchange="showFileName(this)"
+            >
+            <span id="file-text">📄 Drop PDF here or click to upload</span>
+        </label>
+        
+        <div class="formats">
+            <label>
+                <input type="radio" name="format" value="word" required>
+                PDF → Word
+            </label>
+            <label>
+                <input type="radio" name="format" value="text">
+                PDF → Text
+            </label>
+            <label>
+                <input type="radio" name="format" value="images">
+                PDF → Images
+            </label>
+        </div>
+
+        <button type="submit" id="submitBtn">Upload PDF</button>
+
+        <p id="loader" style="display:none; color:blue; font-weight:bold;">
+            ⏳ Converting, please wait...
+        </p>
+    </form>
+</div>
+
+<script>
+function showFileName(input) {
+    if (input.files && input.files.length > 0) {
+        document.getElementById("file-text").innerText =
+            "📄 " + input.files[0].name;
+    }
+}
+
+const form = document.querySelector("form");
+const submitBtn = document.getElementById("submitBtn");
+const loader = document.getElementById("loader");
+
+form.addEventListener("submit", function () {
+    submitBtn.disabled = true;
+    loader.style.display = "block";
+
+    // ✅ SAFELY RESET UI AFTER DOWNLOAD STARTS
+    setTimeout(function () {
+        submitBtn.disabled = false;
+        loader.style.display = "none";
+    }, 3000);
+});
+</script>
+
+</body>
+</html>
